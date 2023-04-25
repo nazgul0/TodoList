@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список заданий
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<!--    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <div class="row mt-4 alert">
+        <div class="col-lg-3 pb-auto center" align="center">
+            {% if photo.photo %}
+                <img class="d-flex mr-3 rounded float-right" style="width: 128px; height: 128px;" src="{{ photo.photo.url }}">
+            {% else %}
+                <img src="{% static 'profile_image/base.png' %}" alt="" class="mr-3 rounded" style="width: 128px; height: 128px;">
+            {% endif %}
+            <h2>{{ request.user.first_name }}</h2>
+        </div>
+        <div class="col-lg-6">
+        <p>Welcome to your todolist.<br>You can <a href="{% url "edit" %}">edit
+your profile</a> or <a href="{% url "password_change" %}">change your
+password</a>.</p>
+        </div>
+    </div>
+
+    <nav class="nav nav-pills flex-column flex-sm-row">
+      <a {% if sort == "all" %} class="flex-sm-fill text-sm-center nav-link active" {% else %} class="flex-sm-fill text-sm-center nav-link"
+        style="background-color: white; color: blue" {% endif %} href="/">ALL</a>
+      <a {% if sort == "done" %} class="flex-sm-fill text-sm-center nav-link active" {% else %} class="flex-sm-fill text-sm-center nav-link"
+        style="background-color: white; color: blue" {% endif %} href="/done/">DONE</a>
+      <a {% if sort == "todo" %} class="flex-sm-fill text-sm-center nav-link active" {% else %} class="flex-sm-fill text-sm-center nav-link"
+        style="background-color: white; color: blue" {% endif %} href="/todo/">TODO</a>
+    </nav>
+
+    {% for image in images %}
+    {% if image.is_done %}
+    <div class="row mt-4 alert alert-success" style="background-color: #2ad576; color: black">
+    {% else %}
+    <div class="row mt-4 alert" style="background-color: #ffc133; color: black">
+    {% endif %}
+        <div class="col-lg-4 pb-auto center" align="center">
+            <img class="d-flex mr-3 rounded float-right" style="width: 128px; height: 128px;" src="{{ image.image.url }}">
+        </div>
+
+        <div class="col-lg-6">
+            <a style="text-decoration: none; color: blue" href="/image/{{ image.id }}/"><strong><h4>{{ image.title }}</h4></strong></a> <br>
+            {{ image.context }}
+        </div>
+        <div class="col-lg-2">
+<!--            <form id="checkTask" method="post" action="/checkTask/">-->
+<!--                {% csrf_token %}-->
+<!--                <input type="hidden" value="{{ image.id }}" id="check_task_id" name="check_task_id">-->
+<!--                {% if image.is_done %}-->
+<!--                <input type="submit" value="Cancel" class="btn" id="check-btn-submit1" title=" task" style="background-color: #ADD8E6; color: darkblue">-->
+<!--                {% else %}-->
+<!--                <input type="submit" value="Did" class="btn" id="check2-btn-submit1" title=" task" style="background-color: #ADD8E6; color: darkblue">-->
+<!--                {% endif %}-->
+<!--            </form>-->
+<!--            <br>-->
+            <form id="redactTask" method="get" action="/redactTask/" enctype="multipart/form-data">
+                {% csrf_token %}
+<!--                <input type="hidden" value="{{ image.image }}" id="image" name="image">-->
+<!--                <input type="hidden" value="{{ image.title }}" id="title" name="title">-->
+                <input type="hidden" value="{{ image.id }}" id="red_task_id" name="red_task_id">
+                <input type="submit" value="Redact" class="btn" id="red-btn-submit1" title="Redact task" style="background-color: #ADD8E6; color: darkblue">
+            </form>
+            <br>
+            <form id="deleteTask" method="post" action="/deleteTask/">
+                {% csrf_token %}
+                <input type="hidden" value="{{ image.id }}" id="id_task_id" name="id_task_id">
+                <input type="submit" value="Delete" class="btn" id="id-btn-submit1" title="Delete task" style="background-color: #ADD8E6; color: darkblue">
+            </form>
+        </div>
+
+        <div>
+            {{ image.created_date }}
+        </div>
+
+<!--        <dir class="row mt-4 alert" style="background-color: #ffe74e; color: black">-->
+<!--    {% for underimage in underimages %}-->
+<!--    <li>-->
+<!--        {{ underimage.context }}-->
+<!--    </li>-->
+<!--    {% endfor %}-->
+<!--    </dir>-->
+    </div>
+
+    {% endfor %}
+{% endblock %}

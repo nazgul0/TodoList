@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Edit your task todolist{% endblock %}
+
+{% block content %}
+  <h1>Edit your task todolist</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+      <input type="hidden" value="{{ images.id }}" id="id_task" name="id_task">
+      <input type="hidden" value="{{ page }}" id="page" name="page">
+    <label for="" class="form-label">context</label>
+    <textarea type="text" required name="context" id="context" class="form-control">{{ images.context }}</textarea>
+
+    <p> <br><input type="submit" value="Save changes"></p>
+  </form>
+{% endblock %}

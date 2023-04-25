@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Edit your list{% endblock %}
+
+{% block content %}
+  <h1>Edit your todolist</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="" class="form-label">title</label>
+        <input type="text" required name="title" value="{{ images.title }}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">context</label>
+        <input type="text" required name="context" value="{{ images.context }}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <p><br></p>
+        <img class="d-flex mr-3 rounded float-right" style="width: 128px; height: 128px;" src="{{ images.image.url }}" alt="image here">
+        <label for="" class="form-label">image</label>
+        <input type="file" name="image" class="form-control">
+    </div>
+      <input type="hidden" value="{{ task_id }}" id="task_id" name="task_id">
+
+    <p><br><input type="submit" value="Save changes"></p>
+  </form>
+{% endblock %}

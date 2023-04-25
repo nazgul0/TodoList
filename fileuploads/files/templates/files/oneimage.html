@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Показ одной задачи
+{% endblock %}
+
+{% block content %}
+    {% if images.is_done %}
+    <div class="row mt-4 alert" style="background-color: #2ad576; color: black">
+    {% else %}
+    <div class="row mt-4 alert" style="background-color: #ffc133; color: black">
+    {% endif %}
+        <div class="col-lg-4 pb-auto center" align="center">
+            <img class="d-flex mr-3 rounded float-right" style="width: 128px; height: 128px;" src="{{ images.image.url }}">
+        </div>
+        <div class="col-lg-6">
+            <strong><h4>{{ images.title }}</h4></strong>
+            {{ images.context }}
+        </div>
+    </div>
+    {% for image in oneimage %}
+    {% if image.is_done %}
+    <div class="row mt-4 alert" style="background-color: #2ad576; color: black">
+    {% else %}
+    <div class="row mt-4 alert" style="background-color: #ffc133; color: black">
+    {% endif %}
+        <div class="col-lg-6">
+            <strong>{{ image.context }}</strong>
+        </div>
+        <div class="col-lg-2">
+            <form id="checkTask" method="post" action="/checkTaskUnder/">
+                {% csrf_token %}
+                <input type="hidden" value="{{ image.id }}" id="check_task_id" name="check_task_id">
+                <input type="hidden" value="{{ images.id }}" id="id_page" name="id_page">
+                {% if image.is_done %}
+                <input type="submit" value="Cancel" class="btn" id="check-btn-submit1" title=" task" style="background-color: #ADD8E6; color: darkblue">
+                {% else %}
+                <input type="submit" value="Did" class="btn" id="check2-btn-submit1" title=" task" style="background-color: #ADD8E6; color: darkblue">
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-lg-2 text-center">
+            <form id="redactTask" method="get" action="/redactTaskUnder/" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" value="{{ image.id }}" id="red_task_id" name="red_task_id">
+                <input type="hidden" value="{{ images.id }}" id="page_r" name="page_r">
+                <input type="submit" value="Redact" class="btn" id="red-btn-submit1" title="Redact task" style="background-color: #ADD8E6; color: darkblue">
+            </form>
+        </div>
+        <div class="col-lg-2">
+            <form id="deleteTask" method="post" action="/deleteTaskUnder/">
+                {% csrf_token %}
+                <input type="hidden" value="{{ image.id }}" id="id_task_id" name="id_task_id">
+                <input type="hidden" value="{{ images.id }}" id="id_page_d" name="id_page_d">
+                <input type="submit" value="Delete" class="btn" id="id-btn-submit1" title="Delete task" style="background-color: #ADD8E6; color: darkblue">
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}
